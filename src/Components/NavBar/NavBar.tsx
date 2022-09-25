@@ -49,29 +49,30 @@ export default function ButtonAppBar() {
 							Aca va la seccion en la que estas
 						</Typography>
 						{sesionStorage && (
-							<Button color='inherit'>
-								<NotificationsIcon />
-							</Button>
-						)}
-						{sesionStorage && (
-							<Button color='inherit' onClick={cerrarSesion}>
-								<AccountCircleIcon />
-							</Button>
-						)}
-						{!sesionStorage && (
-							<Button color='inherit' onClick={handleRegisterOpen}>
-								{LavelType.REGISTRARME}
-							</Button>
+							<Box>
+								<Button color='inherit'>
+									<NotificationsIcon />
+								</Button>
+
+								<Button color='inherit' onClick={cerrarSesion}>
+									<AccountCircleIcon />
+								</Button>
+							</Box>
 						)}
 						{!sesionStorage && (
-							<Button color='inherit' onClick={handleLoginOpen}>
-								{LavelType.INICIAR_SESION}
-							</Button>
+							<Box>
+								<Button color='inherit' onClick={handleRegisterOpen}>
+									{LavelType.REGISTRARME}
+								</Button>
+
+								<Button color='inherit' onClick={handleLoginOpen}>
+									{LavelType.INICIAR_SESION}
+								</Button>
+							</Box>
 						)}
 					</Toolbar>
 				</AppBar>
 			</Box>
-			{/* <Login open={loginOpen} close={handleClose} sesion={iniciarSesion} /> */}
 			<LoginManager open={open} setOpen={setOpen} accion={iniciarSesion} />
 		</>
 	);
