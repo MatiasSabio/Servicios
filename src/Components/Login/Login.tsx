@@ -31,14 +31,8 @@ const Login = (params: Params) => {
 		console.log("ascasc");
 		setOpen({ ...open, register: true, login: false });
 	};
-	const closeRegister = () => {
-		setOpen({ ...open, register: false });
-	};
 	const openRecuperar = () => {
 		setOpen({ ...open, recuperar: true });
-	};
-	const closeRecuperar = () => {
-		setOpen({ ...open, recuperar: false });
 	};
 	const {
 		register,

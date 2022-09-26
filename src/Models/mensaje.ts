@@ -22,4 +22,8 @@ export enum LavelType {
 	MANTENER_SESION_INICIADA = "mantener sesion iniciada",
 	INICIAR_SESION = "Iniciar Sesion",
 	TOKEN = "Token",
+	TIPO = "Tipo",
+	ULTIMO_VENCIMIENTO = "Ultimo Vencimiento",
+	IMPORTANCIA = "Importancia",
+	TITULAR = "Titular",
 }

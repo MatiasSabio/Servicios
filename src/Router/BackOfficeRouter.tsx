@@ -18,7 +18,7 @@ import { Route, Routes } from "react-router-dom";
 
 export const BackofficeRouter = () => {
 	return (
-		<>
+		<Box className='grid grid-cols-12 grid-rows-1'>
 			<NavBar />
 			<SideBar />
 			<Routes>
@@ -35,6 +35,6 @@ export const BackofficeRouter = () => {
 				<Route path='configuracion/usuario' element={<ConfigUsuario />} />
 				<Route path='configuracion/graficas' element={<ConfigGraficas />} />
 			</Routes>
-		</>
+		</Box>
 	);
 };

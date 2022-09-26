@@ -35,18 +35,7 @@ export default function SideBar() {
 		setSelectedIndex(index);
 	};
 	return (
-		<Box
-			sx={{
-				width: "20%",
-				maxWidth: 360,
-				bgcolor: "background.paper ",
-				position: "fixed",
-				top: "50px",
-				height: "100%",
-			}}
-			hidden={false}
-			left='0'
-		>
+		<Box className='col-start-1 col-span-2  mt-16 h-screen  ' hidden={false}>
 			<List component='nav' aria-label='main mailbox folders'>
 				<ListItemButton onClick={() => handleClick("servicio")}>
 					<ListItemText primary='Servicios' />
