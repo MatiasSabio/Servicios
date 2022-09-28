@@ -1,8 +1,10 @@
 import {
 	Button,
 	Checkbox,
+	Divider,
 	FormControl,
 	FormControlLabel,
+	FormLabel,
 	InputLabel,
 	MenuItem,
 	Rating,
@@ -14,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { LavelType, MensajeType } from "@/Models";
 import { Box } from "@mui/system";
 import StarIcon from "@mui/icons-material/Star";
+import { AgregarFacturas, SelectField } from "@/Commons";
 interface SelectItems {
 	id: string;
 	valor: string;
@@ -47,6 +50,7 @@ export default function AgregarServicio() {
 			numeroCliente: "",
 			atencionAlCliente: "",
 			emailOUsuario: "",
+			contraseña: "",
 		},
 	});
 	const tipos = [
@@ -94,24 +98,38 @@ export default function AgregarServicio() {
 		<form
 			noValidate
 			onSubmit={handleSubmit(submit)}
-			className='col-start-3 col-span-10 px-3 mt-20  h-4/5 grid grid-cols-3 gap-2  '
+			className='col-start-3 col-span-10 px-5 mt-20 h-4/5 grid grid-cols-4 gap-2 grid-rows-8  '
 		>
 			<TextField
-				margin='dense'
+				margin='normal'
 				{...register("nombre", {
 					required: MensajeType.REQUERIDO,
 				})}
 				label={LavelType.NOMBRE}
 				type='text'
 				fullWidth
-				variant='standard'
+				variant='outlined'
 				error={Boolean(errors.nombre)}
 				helperText={errors.nombre?.message}
 				autoComplete='off'
 				autoFocus={true}
+				className='m-0 p-0'
 			/>
 			<TextField
-				margin='dense'
+				margin='normal'
+				{...register("ultimoMonto", {
+					required: MensajeType.REQUERIDO,
+				})}
+				label={LavelType.ULTIMO_MONTO}
+				error={Boolean(errors.ultimoMonto)}
+				helperText={errors.ultimoMonto?.message}
+				type='text'
+				fullWidth
+				variant='outlined'
+				autoComplete='off'
+			/>
+			<TextField
+				margin='normal'
 				{...register("ultimoVencimiento", {
 					required: MensajeType.REQUERIDO,
 				})}
@@ -120,21 +138,30 @@ export default function AgregarServicio() {
 				helperText={errors.ultimoVencimiento?.message}
 				type='text'
 				fullWidth
-				variant='standard'
+				variant='outlined'
 				autoComplete='off'
 			/>
-			<FormControl fullWidth>
-				<InputLabel id='tipo-lavel'>{LavelType.TIPO}</InputLabel>
-				<Select
-					labelId='tipo-lavel'
-					id='tipo-select'
-					value={getValues("tipo")}
-					label={LavelType.TIPO}
-					onChange={(e) => setValue("tipo", e.target.value)}
-				>
-					{mapMenuItem(tipos)}
-				</Select>
-			</FormControl>
+			<SelectField
+				label={LavelType.TIPO}
+				register={register}
+				registerValue='tipo'
+				errors={errors.tipo}
+				lista={tipos}
+				vacio={true}
+				noShrink={true}
+				multipleTrue={true}
+			/>
+			<SelectField
+				label={LavelType.COMPARTIR}
+				register={register}
+				registerValue='compartir'
+				errors={errors.compartir}
+				lista={usuariosAgregados}
+				vacio={true}
+				noShrink={true}
+				multipleTrue={true}
+			/>
+
 			<Box
 				sx={{
 					width: 200,
@@ -162,30 +189,81 @@ export default function AgregarServicio() {
 					</Box>
 				)}
 			</Box>
-			<FormControl fullWidth>
-				<InputLabel id='titular-label'>{LavelType.TITULAR}</InputLabel>
-				<Select
-					labelId='titular-label'
-					id='titular-select'
-					value={getValues("titular")}
-					label={LavelType.TITULAR}
-					onChange={(e) => setValue("titular", e.target.value)}
-				>
-					{mapMenuItem(titulares)}
-				</Select>
-			</FormControl>
-			<FormControlLabel
-				{...register("titular")}
-				control={<Checkbox />}
-				label='Titular'
-				style={{ color: "rgba(0, 0, 0, 0.6)" }}
+			<SelectField
+				label={LavelType.TITULAR}
+				register={register}
+				registerValue='titular'
+				errors={errors.titular}
+				lista={titulares}
+				vacio={true}
+				noShrink={true}
 			/>
+			<Divider variant='middle' className='col-span-full self-center ' />
+			<AgregarFacturas register={register} registerValue={"facturas"} />
+			<Button variant='outlined'>Agregar accion y observacion</Button>
+			<Box className='col-span-full grid grid-cols-10'>
+				<FormLabel className='self-center col-span-2'>Datos Ocultos</FormLabel>
+				<Divider className='self-center col-span-7' />
+			</Box>
+			<TextField
+				margin='normal'
+				{...register("numeroCliente", {
+					required: MensajeType.REQUERIDO,
+				})}
+				label={LavelType.NUMERO_DE_CLIENTE}
+				error={Boolean(errors.numeroCliente)}
+				helperText={errors.numeroCliente?.message}
+				type='text'
+				fullWidth
+				variant='outlined'
+				autoComplete='off'
+			/>
+			<TextField
+				margin='normal'
+				{...register("atencionAlCliente", {
+					required: MensajeType.REQUERIDO,
+				})}
+				label={LavelType.ATENCION_AL_CLIENTE}
+				error={Boolean(errors.atencionAlCliente)}
+				helperText={errors.atencionAlCliente?.message}
+				type='text'
+				fullWidth
+				variant='outlined'
+				autoComplete='off'
+			/>
+			<TextField
+				margin='normal'
+				{...register("emailOUsuario", {
+					required: MensajeType.REQUERIDO,
+				})}
+				label={LavelType.EMAIL_O_USUARIO}
+				error={Boolean(errors.emailOUsuario)}
+				helperText={errors.emailOUsuario?.message}
+				type='text'
+				fullWidth
+				variant='outlined'
+				autoComplete='off'
+			/>
+			<TextField
+				margin='normal'
+				{...register("contraseña", {
+					required: MensajeType.REQUERIDO,
+				})}
+				label={LavelType.CONTRASEÑA}
+				error={Boolean(errors.contraseña)}
+				helperText={errors.contraseña?.message}
+				type='text'
+				fullWidth
+				variant='outlined'
+				autoComplete='off'
+			/>
+
 			<Button
 				variant='contained'
 				fullWidth={true}
 				color='primary'
 				type='submit'
-				className='col-span-full'
+				className='col-span-full '
 				onClick={() => handleSubmit(submit)}
 			>
 				Agregar Servicio

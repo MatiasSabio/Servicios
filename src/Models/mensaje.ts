@@ -4,6 +4,8 @@ export enum MensajeType {
 	MIN_SEIS = "min seis caracteres",
 	CONTRASEÑA_INVALIDA = "contraseña invalida",
 	CONTRASEÑA_IGUAL = "la contraseña debe ser igual a la anterior",
+	SELECCIONA = "Selecciona una opcion",
+	NINGUNA = "Ninguna",
 }
 export enum LavelType {
 	NOMBRE = "Nombre",
@@ -26,4 +28,9 @@ export enum LavelType {
 	ULTIMO_VENCIMIENTO = "Ultimo Vencimiento",
 	IMPORTANCIA = "Importancia",
 	TITULAR = "Titular",
+	ULTIMO_MONTO = "Ultimo Monto",
+	COMPARTIR = "Compartir",
+	NUMERO_DE_CLIENTE = "Numero De Cliente",
+	ATENCION_AL_CLIENTE = "Atencion Al Cliente",
+	EMAIL_O_USUARIO = "Email O Usuario",
 }
