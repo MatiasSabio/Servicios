@@ -17,7 +17,7 @@ const emails = ["username@gmail.com", "user02@gmail.com"];
 export interface SimpleDialogProps {
 	open: boolean;
 	selectedValue: string;
-	onClose: (value: string) => void;
+	onClose: any;
 }
 
 function SimpleDialog(props: SimpleDialogProps) {

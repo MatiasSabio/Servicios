@@ -33,4 +33,8 @@ export enum LavelType {
 	NUMERO_DE_CLIENTE = "Numero De Cliente",
 	ATENCION_AL_CLIENTE = "Atencion Al Cliente",
 	EMAIL_O_USUARIO = "Email O Usuario",
+	MES = "Mes",
+	AÑO = "Año",
+	PERIODO = "Periodo",
+	
 }

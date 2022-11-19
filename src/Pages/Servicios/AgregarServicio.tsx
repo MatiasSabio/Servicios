@@ -17,10 +17,7 @@ import { LavelType, MensajeType } from "@/Models";
 import { Box } from "@mui/system";
 import StarIcon from "@mui/icons-material/Star";
 import { AgregarFacturas, SelectField } from "@/Commons";
-interface SelectItems {
-	id: string;
-	valor: string;
-}
+import SelectItems from "@/Models/selectItemInterface";
 
 export default function AgregarServicio() {
 	const [banderaLocalidad, setBanderaLocalidad] = useState(true);
@@ -40,12 +37,13 @@ export default function AgregarServicio() {
 		defaultValues: {
 			nombre: "",
 			ultimoVencimiento: "",
+			periodo: "",
 			tipo: "",
-			importancia: "3",
+			importancia: "",
 			titular: "",
 			compartir: "",
 			ultimoMonto: "",
-			facturas: "",
+			facturas: [],
 			observaciones: "",
 			numeroCliente: "",
 			atencionAlCliente: "",
@@ -58,23 +56,26 @@ export default function AgregarServicio() {
 		{ id: "2", valor: "Subscripcion" },
 		{ id: "3", valor: "Deporte" },
 	];
-	const importancias = [
-		{ id: "1", valor: "Poca" },
-		{ id: "2", valor: "Intermedia" },
-		{ id: "3", valor: "Mucha" },
+	const periodos = [
+		{ id: "1", valor: "Diario" },
+		{ id: "2", valor: "Semanal" },
+		{ id: "3", valor: "Quincenal" },
+		{ id: "4", valor: "Mensual" },
+		{ id: "5", valor: "Bimestral" },
+		{ id: "6", valor: "Trimestral" },
+		{ id: "7", valor: "Cautrimestral" },
+		{ id: "8", valor: "Semestral" },
+		{ id: "9", valor: "Anual" },
+		{ id: "10", valor: "Otros" },
 	];
-	const labels: { [index: string]: string } = {
-		1: "prescindible",
-		2: "Poca",
-		3: "Intermedia",
-		4: "Mucha",
-		5: "imprescindible",
-	};
-	function getLabelText(value: number) {
-		return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
-	}
-	const changeImportancia = (newValue: any) =>
-		newValue !== null && newValue?.toString();
+	const importancias = [
+		{ id: "1", valor: "Innecesario" },
+		{ id: "2", valor: "Poca" },
+		{ id: "3", valor: "Intermedia" },
+		{ id: "4", valor: "Mucha" },
+		{ id: "3", valor: "Imprescindible" },
+	];
+
 	const titulares = [
 		{ id: "1", valor: "Yo" },
 		{ id: "2", valor: "Barby" },
@@ -100,6 +101,12 @@ export default function AgregarServicio() {
 			onSubmit={handleSubmit(submit)}
 			className='col-start-3 col-span-10 px-5 mt-20 h-4/5 grid grid-cols-4 gap-2 grid-rows-8  '
 		>
+			<Box className='col-span-full grid grid-cols-10'>
+				<FormLabel className='self-center col-span-2'>
+					Datos Del Servicio
+				</FormLabel>
+				<Divider className='self-center col-span-7' />
+			</Box>
 			<TextField
 				margin='normal'
 				{...register("nombre", {
@@ -113,13 +120,18 @@ export default function AgregarServicio() {
 				helperText={errors.nombre?.message}
 				autoComplete='off'
 				autoFocus={true}
-				className='m-0 p-0'
+				className='m-0 p-0 text-white'
+				InputLabelProps={{
+					sx: {
+						color: "white",
+						borderColor: "white, solid, 1px",
+						borderStyle: "hidden",
+					},
+				}}
 			/>
 			<TextField
 				margin='normal'
-				{...register("ultimoMonto", {
-					required: MensajeType.REQUERIDO,
-				})}
+				{...register("ultimoMonto")}
 				label={LavelType.ULTIMO_MONTO}
 				error={Boolean(errors.ultimoMonto)}
 				helperText={errors.ultimoMonto?.message}
@@ -130,9 +142,7 @@ export default function AgregarServicio() {
 			/>
 			<TextField
 				margin='normal'
-				{...register("ultimoVencimiento", {
-					required: MensajeType.REQUERIDO,
-				})}
+				{...register("ultimoVencimiento")}
 				label={LavelType.ULTIMO_VENCIMIENTO}
 				error={Boolean(errors.ultimoVencimiento)}
 				helperText={errors.ultimoVencimiento?.message}
@@ -147,9 +157,17 @@ export default function AgregarServicio() {
 				registerValue='tipo'
 				errors={errors.tipo}
 				lista={tipos}
-				vacio={true}
+				preseleccion='1'
 				noShrink={true}
-				multipleTrue={true}
+			/>
+			<SelectField
+				label={LavelType.PERIODO}
+				register={register}
+				registerValue='periodo'
+				errors={errors.periodo}
+				lista={periodos}
+				noShrink={true}
+				preseleccion='4'
 			/>
 			<SelectField
 				label={LavelType.COMPARTIR}
@@ -157,38 +175,20 @@ export default function AgregarServicio() {
 				registerValue='compartir'
 				errors={errors.compartir}
 				lista={usuariosAgregados}
-				vacio={true}
 				noShrink={true}
 				multipleTrue={true}
 			/>
+			<SelectField
+				label={LavelType.IMPORTANCIA}
+				register={register}
+				registerValue='importancia'
+				errors={errors.importancia}
+				lista={importancias}
+				vacio={true}
+				noShrink={true}
+				preseleccion={"3"}
+			/>
 
-			<Box
-				sx={{
-					width: 200,
-					display: "flex",
-					alignItems: "center",
-				}}
-			>
-				<Rating
-					name='hover-feedback'
-					value={parseInt(getValues("importancia"))}
-					precision={1}
-					getLabelText={getLabelText}
-					onChange={(event, newValue) => {
-						setValue("importancia", changeImportancia(newValue));
-					}}
-					emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize='inherit' />}
-				/>
-				{valueImportancia !== null && (
-					<Box sx={{ ml: 2 }}>
-						{
-							labels[
-								hoverImportancia !== -1 ? hoverImportancia : valueImportancia
-							]
-						}
-					</Box>
-				)}
-			</Box>
 			<SelectField
 				label={LavelType.TITULAR}
 				register={register}
@@ -197,9 +197,19 @@ export default function AgregarServicio() {
 				lista={titulares}
 				vacio={true}
 				noShrink={true}
+				preseleccion={"1"}
 			/>
-			<Divider variant='middle' className='col-span-full self-center ' />
-			<AgregarFacturas register={register} registerValue={"facturas"} />
+			<AgregarFacturas
+				register={register}
+				registerValue={"facturas"}
+				errors={errors}
+			/>
+			<Box className='col-span-full grid grid-cols-10'>
+				<FormLabel className='self-center col-span-2'>
+					Acciones u Observaciones
+				</FormLabel>
+				<Divider className='self-center col-span-7' />
+			</Box>
 			<Button variant='outlined'>Agregar accion y observacion</Button>
 			<Box className='col-span-full grid grid-cols-10'>
 				<FormLabel className='self-center col-span-2'>Datos Ocultos</FormLabel>
@@ -207,9 +217,7 @@ export default function AgregarServicio() {
 			</Box>
 			<TextField
 				margin='normal'
-				{...register("numeroCliente", {
-					required: MensajeType.REQUERIDO,
-				})}
+				{...register("numeroCliente")}
 				label={LavelType.NUMERO_DE_CLIENTE}
 				error={Boolean(errors.numeroCliente)}
 				helperText={errors.numeroCliente?.message}
@@ -220,9 +228,7 @@ export default function AgregarServicio() {
 			/>
 			<TextField
 				margin='normal'
-				{...register("atencionAlCliente", {
-					required: MensajeType.REQUERIDO,
-				})}
+				{...register("atencionAlCliente")}
 				label={LavelType.ATENCION_AL_CLIENTE}
 				error={Boolean(errors.atencionAlCliente)}
 				helperText={errors.atencionAlCliente?.message}
@@ -233,9 +239,7 @@ export default function AgregarServicio() {
 			/>
 			<TextField
 				margin='normal'
-				{...register("emailOUsuario", {
-					required: MensajeType.REQUERIDO,
-				})}
+				{...register("emailOUsuario")}
 				label={LavelType.EMAIL_O_USUARIO}
 				error={Boolean(errors.emailOUsuario)}
 				helperText={errors.emailOUsuario?.message}
@@ -246,9 +250,7 @@ export default function AgregarServicio() {
 			/>
 			<TextField
 				margin='normal'
-				{...register("contraseña", {
-					required: MensajeType.REQUERIDO,
-				})}
+				{...register("contraseña")}
 				label={LavelType.CONTRASEÑA}
 				error={Boolean(errors.contraseña)}
 				helperText={errors.contraseña?.message}

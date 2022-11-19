@@ -1,4 +1,5 @@
 import { MensajeType } from "@/Models";
+import SelectItems from "@/Models/selectItemInterface";
 import {
 	FormControl,
 	FormHelperText,
@@ -7,20 +8,19 @@ import {
 	Select,
 } from "@mui/material";
 import { GenerateId } from "../Utils";
-interface Lista {
-	id: string;
-	valor: string;
-}
+
 interface Props {
 	label: string;
 	errors: any;
 	register: any;
 	registerValue: string;
-	lista: Array<Lista>;
+	lista: Array<SelectItems>;
 	multipleTrue?: Boolean;
 	inhabilitado?: Boolean | undefined;
 	onSelect?: any;
 	vacio?: boolean;
+	preseleccion?: any;
+	className?: string;
 	noShrink?: boolean;
 }
 
@@ -34,6 +34,8 @@ export const SelectField = ({
 	inhabilitado,
 	onSelect,
 	vacio,
+	className,
+	preseleccion,
 	noShrink,
 }: Props) => {
 	return (
@@ -41,6 +43,7 @@ export const SelectField = ({
 			margin='normal'
 			disabled={inhabilitado}
 			error={Boolean(errors)}
+			className={className ? className : ""}
 		>
 			<InputLabel error={Boolean(errors)} htmlFor='select-multiple-native'>
 				{label}
@@ -48,39 +51,12 @@ export const SelectField = ({
 			<Select
 				displayEmpty
 				multiple={multipleTrue}
-				defaultValue={[]}
+				defaultValue={preseleccion ? preseleccion : []}
 				label={label}
 				{...register(registerValue, {
 					required: MensajeType.REQUERIDO,
 				})}
 				error={Boolean(errors)}
-				renderValue={(selected: any) => {
-					if (!vacio) {
-						return (
-							<em style={{ color: "rgba(0, 0, 0, 0.6)" }}>
-								{MensajeType.SELECCIONA}
-							</em>
-						);
-					}
-
-					let turnoLista: Array<string | undefined> = [];
-					if (typeof selected !== "string") {
-						selected.forEach((s: any) => {
-							let t = lista.find((t) => t.id === s);
-							if (t !== undefined) {
-								turnoLista.push(t.valor);
-							}
-						});
-						return turnoLista.join(", ");
-					} else {
-						onSelect && onSelect();
-						let seleccionado = lista.find((s) => s.id === selected);
-						return seleccionado?.valor;
-					}
-				}}
-				inputProps={{
-					id: "select-multiple-native",
-				}}
 			>
 				<MenuItem key={GenerateId()} value={""}>
 					{MensajeType.NINGUNA}
