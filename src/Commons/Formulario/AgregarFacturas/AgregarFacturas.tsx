@@ -1,3 +1,4 @@
+import { Factura } from "@/Models";
 import { Button, Chip, Divider, FormLabel } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
@@ -9,7 +10,7 @@ interface Props {
 }
 
 const AgregarFacturas = ({ register, registerValue, errors }: Props) => {
-	const [facturas, setFacturas] = useState<Array<any>>([]);
+	const [facturas, setFacturas] = useState<Array<Factura>>([]);
 	const [bandera, setBandera] = useState(false);
 	const open = () => {
 		setBandera(true);
@@ -40,7 +41,7 @@ const AgregarFacturas = ({ register, registerValue, errors }: Props) => {
 					<Box className='w-72 overflow-y-auto grid grid-cols-2 gap-2'>
 						{facturas.map((factura, i) => (
 							<Chip
-								label={`${factura.fecha}-${factura.nombre}`}
+								label={`${factura.month}/${factura.year}-${factura.nombre}`}
 								variant='outlined'
 								key={i}
 							/>

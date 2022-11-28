@@ -10,9 +10,8 @@ import { SimpleDialogProps } from "../PopUpSelect/PopUpSelect";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { Box, Tooltip } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { LavelType } from "@/Models";
+import { Factura, LavelType } from "@/Models";
 import { SelectField } from "../SelectField";
-import Factura from "@/Models/facturaInterface";
 
 interface Props {
 	onClose: any;

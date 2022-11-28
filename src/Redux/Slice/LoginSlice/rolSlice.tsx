@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useAppSelector } from "..";
 
 const rolSlice = createSlice({
 	name: "rol",
@@ -13,8 +12,8 @@ const rolSlice = createSlice({
 
 export const { nuevo: nuevoRol } = rolSlice.actions;
 
-export const useRolSelector = () => {
-	return useAppSelector((state) => state.rol);
-};
+// export const useRolSelector = () => {
+// 	return useAppSelector((state) => state.rol);
+// };
 
 export default rolSlice.reducer;

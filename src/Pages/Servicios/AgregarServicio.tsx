@@ -11,21 +11,18 @@ import {
 	Select,
 	TextField,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { LavelType, MensajeType } from "@/Models";
+import { LavelType, MensajeType, SelectItems } from "@/Models";
 import { Box } from "@mui/system";
 import StarIcon from "@mui/icons-material/Star";
 import { AgregarFacturas, SelectField } from "@/Commons";
-import SelectItems from "@/Models/selectItemInterface";
+import { useDispatch } from "react-redux";
+import { postServicios } from "@/Redux/Slice/ServiciosSlice/serviciosSlice";
 
 export default function AgregarServicio() {
-	const [banderaLocalidad, setBanderaLocalidad] = useState(true);
-	const [listaLocalidades, setListaLocalidades] = useState<
-		{ id: string; valor: string }[]
-	>([]);
-	const [hoverImportancia, setHoverImportancia] = useState(-1);
-	const [valueImportancia, setValuesImportancia] = useState<number | null>(3);
+	const dispatch = useDispatch();
+
 	const {
 		register,
 		handleSubmit,
@@ -73,7 +70,7 @@ export default function AgregarServicio() {
 		{ id: "2", valor: "Poca" },
 		{ id: "3", valor: "Intermedia" },
 		{ id: "4", valor: "Mucha" },
-		{ id: "3", valor: "Imprescindible" },
+		{ id: "5", valor: "Imprescindible" },
 	];
 
 	const titulares = [
@@ -86,13 +83,11 @@ export default function AgregarServicio() {
 		{ id: "2", valor: "Graciela" },
 		{ id: "3", valor: "Jorge" },
 	];
-	const mapMenuItem = (array: SelectItems[]) => {
-		return array.map((item: SelectItems) => (
-			<MenuItem value={item.id}>{item.valor}</MenuItem>
-		));
-	};
+
 	const submit = () => {
-		console.log("sumbit");
+		let values = getValues();
+		console.log(values);
+		dispatch(postServicios(values));
 	};
 
 	return (
