@@ -15,9 +15,10 @@ interface Props {
 	register: any;
 	registerValue: string;
 	lista: Array<SelectItems>;
+	setValue: any;
 	multipleTrue?: Boolean;
 	inhabilitado?: Boolean | undefined;
-	onSelect?: any;
+	action?: any;
 	vacio?: boolean;
 	preseleccion?: any;
 	className?: string;
@@ -32,12 +33,17 @@ export const SelectField = ({
 	lista,
 	multipleTrue,
 	inhabilitado,
-	onSelect,
+	action,
+	setValue,
 	vacio,
 	className,
 	preseleccion,
 	noShrink,
 }: Props) => {
+	const onSelect = (registerValue: string, value: SelectItems) => {
+		setValue(registerValue, value);
+	};
+	const itemNinguna = { id: "", value: "" };
 	return (
 		<FormControl
 			margin='normal'
@@ -53,17 +59,26 @@ export const SelectField = ({
 				multiple={multipleTrue}
 				defaultValue={preseleccion ? preseleccion : []}
 				label={label}
-				{...register(registerValue, {
-					required: MensajeType.REQUERIDO,
-				})}
+				// {...register(registerValue, {
+				// 	required: MensajeType.REQUERIDO,
+				// })}
 				error={Boolean(errors)}
 			>
-				<MenuItem key={GenerateId()} value={""}>
+				<MenuItem
+					key={GenerateId()}
+					onClick={() => onSelect(registerValue, itemNinguna)}
+					value={""}
+				>
 					{MensajeType.NINGUNA}
 				</MenuItem>
-				{lista.map((t: any) => (
-					<MenuItem key={GenerateId()} value={t.id}>
-						{t.valor}
+				{lista.map((t: SelectItems) => (
+					<MenuItem
+						key={GenerateId()}
+						onInput={() => onSelect(registerValue, t)}
+						onClick={() => onSelect(registerValue, t)}
+						value={t.id}
+					>
+						{t.value}
 					</MenuItem>
 				))}
 			</Select>

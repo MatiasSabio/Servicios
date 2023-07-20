@@ -1,3 +1,4 @@
+export * from "./ObservacionesInterface";
 export * from "./facturaInterface";
 export * from "./loginManagerInterface";
 export * from "./mensaje";

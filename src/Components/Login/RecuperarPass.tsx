@@ -1,4 +1,4 @@
-import { Contador } from "@/Commons";
+import { Contador } from "@/Utils";
 import { LavelType, loginManagerInterface } from "@/Models";
 import {
 	Button,

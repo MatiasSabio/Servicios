@@ -1,28 +1,20 @@
-import {
-	Button,
-	Checkbox,
-	Divider,
-	FormControl,
-	FormControlLabel,
-	FormLabel,
-	InputLabel,
-	MenuItem,
-	Rating,
-	Select,
-	TextField,
-} from "@mui/material";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { LavelType, MensajeType, SelectItems } from "@/Models";
-import { Box } from "@mui/system";
-import StarIcon from "@mui/icons-material/Star";
-import { AgregarFacturas, SelectField } from "@/Commons";
-import { useDispatch } from "react-redux";
+import { AgregarFacturas } from "@/Components";
+import { LavelType, MensajeType } from "@/Models";
 import { postServicios } from "@/Redux/Slice/ServiciosSlice/serviciosSlice";
-
+import { Button, Divider, FormLabel, TextField } from "@mui/material";
+import { Box } from "@mui/system";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { useState } from "react";
+import { SelectField } from "@/Commons";
 export default function AgregarServicio() {
 	const dispatch = useDispatch();
-
+	const [banderaPago, setBanderaPago] = useState(false);
+	const changeBanderaPago = () => {
+		setBanderaPago(!banderaPago);
+	};
 	const {
 		register,
 		handleSubmit,
@@ -34,14 +26,16 @@ export default function AgregarServicio() {
 		defaultValues: {
 			nombre: "",
 			ultimoVencimiento: "",
-			periodo: "",
-			tipo: "",
-			importancia: "",
-			titular: "",
-			compartir: "",
 			ultimoMonto: "",
+			periodo: { id: "", value: "" },
+			tipo: { id: "", value: "" },
+			importancia: { id: "", value: "" },
+			titular: { id: "", value: "" },
+			compartir: { id: "", value: "" },
 			facturas: [],
 			observaciones: "",
+			pagado: false,
+			fechaDePago: "",
 			numeroCliente: "",
 			atencionAlCliente: "",
 			emailOUsuario: "",
@@ -49,43 +43,44 @@ export default function AgregarServicio() {
 		},
 	});
 	const tipos = [
-		{ id: "1", valor: "Servicio Basico" },
-		{ id: "2", valor: "Subscripcion" },
-		{ id: "3", valor: "Deporte" },
+		{ id: "1", value: "Servicio Basico" },
+		{ id: "2", value: "Subscripcion" },
+		{ id: "3", value: "Deporte" },
 	];
 	const periodos = [
-		{ id: "1", valor: "Diario" },
-		{ id: "2", valor: "Semanal" },
-		{ id: "3", valor: "Quincenal" },
-		{ id: "4", valor: "Mensual" },
-		{ id: "5", valor: "Bimestral" },
-		{ id: "6", valor: "Trimestral" },
-		{ id: "7", valor: "Cautrimestral" },
-		{ id: "8", valor: "Semestral" },
-		{ id: "9", valor: "Anual" },
-		{ id: "10", valor: "Otros" },
+		{ id: "1", value: "Diario" },
+		{ id: "2", value: "Semanal" },
+		{ id: "3", value: "Quincenal" },
+		{ id: "4", value: "Mensual" },
+		{ id: "5", value: "Bimestral" },
+		{ id: "6", value: "Trimestral" },
+		{ id: "7", value: "Cautrimestral" },
+		{ id: "8", value: "Semestral" },
+		{ id: "9", value: "Anual" },
+		{ id: "10", value: "Otros" },
 	];
 	const importancias = [
-		{ id: "1", valor: "Innecesario" },
-		{ id: "2", valor: "Poca" },
-		{ id: "3", valor: "Intermedia" },
-		{ id: "4", valor: "Mucha" },
-		{ id: "5", valor: "Imprescindible" },
+		{ id: "1", value: "Innecesario" },
+		{ id: "2", value: "Poca" },
+		{ id: "3", value: "Intermedia" },
+		{ id: "4", value: "Mucha" },
+		{ id: "5", value: "Imprescindible" },
 	];
 
 	const titulares = [
-		{ id: "1", valor: "Yo" },
-		{ id: "2", valor: "Barby" },
-		{ id: "3", valor: "Compartido" },
+		{ id: "1", value: "Yo" },
+		{ id: "2", value: "Barby" },
+		{ id: "3", value: "Compartido" },
 	];
 	const usuariosAgregados = [
-		{ id: "1", valor: "Barby" },
-		{ id: "2", valor: "Graciela" },
-		{ id: "3", valor: "Jorge" },
+		{ id: "1", value: "Barby" },
+		{ id: "2", value: "Graciela" },
+		{ id: "3", value: "Jorge" },
 	];
 
 	const submit = () => {
 		let values = getValues();
+
 		console.log(values);
 		dispatch(postServicios(values));
 	};
@@ -148,6 +143,7 @@ export default function AgregarServicio() {
 			/>
 			<SelectField
 				label={LavelType.TIPO}
+				setValue={setValue}
 				register={register}
 				registerValue='tipo'
 				errors={errors.tipo}
@@ -157,6 +153,7 @@ export default function AgregarServicio() {
 			/>
 			<SelectField
 				label={LavelType.PERIODO}
+				setValue={setValue}
 				register={register}
 				registerValue='periodo'
 				errors={errors.periodo}
@@ -167,6 +164,7 @@ export default function AgregarServicio() {
 			<SelectField
 				label={LavelType.COMPARTIR}
 				register={register}
+				setValue={setValue}
 				registerValue='compartir'
 				errors={errors.compartir}
 				lista={usuariosAgregados}
@@ -176,6 +174,7 @@ export default function AgregarServicio() {
 			<SelectField
 				label={LavelType.IMPORTANCIA}
 				register={register}
+				setValue={setValue}
 				registerValue='importancia'
 				errors={errors.importancia}
 				lista={importancias}
@@ -188,12 +187,32 @@ export default function AgregarServicio() {
 				label={LavelType.TITULAR}
 				register={register}
 				registerValue='titular'
+				setValue={setValue}
 				errors={errors.titular}
 				lista={titulares}
 				vacio={true}
 				noShrink={true}
 				preseleccion={"1"}
 			/>
+			<FormControlLabel
+				{...register("pagado")}
+				label={LavelType.PAGADO}
+				onClick={() => changeBanderaPago()}
+				control={<Checkbox />}
+			/>
+			{banderaPago && (
+				<TextField
+					margin='normal'
+					{...register("fechaDePago")}
+					label={LavelType.FECHA_DE_PAGO}
+					error={Boolean(errors.fechaDePago)}
+					helperText={errors.fechaDePago?.message}
+					type='date'
+					fullWidth
+					variant='outlined'
+					autoComplete='off'
+				/>
+			)}
 			<AgregarFacturas
 				register={register}
 				registerValue={"facturas"}

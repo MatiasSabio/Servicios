@@ -11,7 +11,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { Box, Tooltip } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Factura, LavelType } from "@/Models";
-import { SelectField } from "../SelectField";
+import { SelectField } from "../../Commons/SelectField";
 
 interface Props {
 	onClose: any;
