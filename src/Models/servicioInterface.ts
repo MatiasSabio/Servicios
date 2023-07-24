@@ -4,8 +4,8 @@ import { SelectItems } from "./selectItemInterface";
 
 export interface Servicio {
 	nombre: string;
-	ultimoVencimiento: string;
 	ultimoMonto: string;
+	ultimoVencimiento: string;
 	periodo: SelectItems;
 	tipo: SelectItems;
 	importancia: SelectItems;

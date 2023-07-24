@@ -20,7 +20,7 @@ interface Props {
 	inhabilitado?: Boolean | undefined;
 	action?: any;
 	vacio?: boolean;
-	preseleccion?: any;
+	preseleccionId?: string;
 	className?: string;
 	noShrink?: boolean;
 }
@@ -37,12 +37,21 @@ export const SelectField = ({
 	setValue,
 	vacio,
 	className,
-	preseleccion,
+	preseleccionId,
 	noShrink,
 }: Props) => {
 	const onSelect = (registerValue: string, value: SelectItems) => {
 		setValue(registerValue, value);
 	};
+	const setPreseleccion = () => {
+		lista.forEach((item) => {
+			if (item.id === preseleccionId) {
+				setValue(registerValue, item);
+			}
+		});
+		return preseleccionId;
+	};
+
 	const itemNinguna = { id: "", value: "" };
 	return (
 		<FormControl
@@ -57,7 +66,7 @@ export const SelectField = ({
 			<Select
 				displayEmpty
 				multiple={multipleTrue}
-				defaultValue={preseleccion ? preseleccion : []}
+				defaultValue={preseleccionId ? setPreseleccion() : []}
 				label={label}
 				// {...register(registerValue, {
 				// 	required: MensajeType.REQUERIDO,

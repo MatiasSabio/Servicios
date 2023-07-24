@@ -38,4 +38,5 @@ export enum LavelType {
 	PERIODO = "Periodo",
 	PAGADO = "Pagado",
 	FECHA_DE_PAGO = "Fecha De Pago",
+	PLAZO = "Plazo",
 }

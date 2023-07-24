@@ -2,27 +2,28 @@ import { Servicio } from "@/Models";
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 type InitialState = {
-	servicios: Servicio[];
+	serviciosArray: Servicio[];
 };
-const initialState: InitialState = { servicios: [] };
+
+const initialState: InitialState = { serviciosArray: [] };
 
 const servicioSlice = createSlice({
 	name: "servicios",
 	initialState,
 	reducers: {
 		postServicios: (state, action) => {
-			state.servicios = [
-				...state.servicios,
+			state.serviciosArray = [
+				...state.serviciosArray,
 				{ ...action.payload, id: uuidv4() },
 			];
 		},
 		deleteServicio: (state, action) => {
-			state.servicios = state.servicios.filter(
-				(serv) => serv.id !== action.payload
+			state.serviciosArray = state.serviciosArray.filter(
+				(serv) => serv.id !== action.payload.id
 			);
 		},
 		editServicio: (state, action) => {
-			let foundServicio = state.servicios.find(
+			let foundServicio = state.serviciosArray.find(
 				(serv) => serv.id === action.payload.id
 			);
 			if (foundServicio) foundServicio = action.payload;

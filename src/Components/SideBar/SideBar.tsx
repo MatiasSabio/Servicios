@@ -29,8 +29,6 @@ export default function SideBar() {
 		});
 	};
 	const handleListItemClick = (event: any, index: number, selected: string) => {
-		console.log("hola");
-
 		navigate(`./${selected}`);
 		setSelectedIndex(index);
 	};

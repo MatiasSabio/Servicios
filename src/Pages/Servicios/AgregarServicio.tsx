@@ -9,6 +9,9 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useState } from "react";
 import { SelectField } from "@/Commons";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import { DateFunctions } from "@/Utils";
 export default function AgregarServicio() {
 	const dispatch = useDispatch();
 	const [banderaPago, setBanderaPago] = useState(false);
@@ -28,6 +31,7 @@ export default function AgregarServicio() {
 			ultimoVencimiento: "",
 			ultimoMonto: "",
 			periodo: { id: "", value: "" },
+			// plazo: { id: "", value: "" },
 			tipo: { id: "", value: "" },
 			importancia: { id: "", value: "" },
 			titular: { id: "", value: "" },
@@ -42,6 +46,7 @@ export default function AgregarServicio() {
 			contraseña: "",
 		},
 	});
+
 	const tipos = [
 		{ id: "1", value: "Servicio Basico" },
 		{ id: "2", value: "Subscripcion" },
@@ -59,6 +64,14 @@ export default function AgregarServicio() {
 		{ id: "9", value: "Anual" },
 		{ id: "10", value: "Otros" },
 	];
+	// const plazos = [
+	// 	{ id: "1", value: "permanente" },
+	// 	{ id: "2", value: "anual" },
+	// 	{ id: "5", value: "1 mes" },
+	// 	{ id: "3", value: "3 meses" },
+	// 	{ id: "4", value: "6 meses" },
+	// 	{ id: "4", value: "otro" },
+	// ];
 	const importancias = [
 		{ id: "1", value: "Innecesario" },
 		{ id: "2", value: "Poca" },
@@ -80,8 +93,8 @@ export default function AgregarServicio() {
 
 	const submit = () => {
 		let values = getValues();
+		const date = DateFunctions.generateDateToday();
 
-		console.log(values);
 		dispatch(postServicios(values));
 	};
 
@@ -111,13 +124,6 @@ export default function AgregarServicio() {
 				autoComplete='off'
 				autoFocus={true}
 				className='m-0 p-0 text-white'
-				InputLabelProps={{
-					sx: {
-						color: "white",
-						borderColor: "white, solid, 1px",
-						borderStyle: "hidden",
-					},
-				}}
 			/>
 			<TextField
 				margin='normal'
@@ -130,17 +136,26 @@ export default function AgregarServicio() {
 				variant='outlined'
 				autoComplete='off'
 			/>
+			{/* <FormControl>
+				<InputLabel>{LavelType.ULTIMO_VENCIMIENTO}</InputLabel> */}
 			<TextField
 				margin='normal'
 				{...register("ultimoVencimiento")}
-				label={LavelType.ULTIMO_VENCIMIENTO}
 				error={Boolean(errors.ultimoVencimiento)}
+				label={LavelType.ULTIMO_VENCIMIENTO}
 				helperText={errors.ultimoVencimiento?.message}
-				type='text'
+				type='date'
 				fullWidth
 				variant='outlined'
 				autoComplete='off'
+				InputLabelProps={{
+					shrink: true,
+					// sx: {
+					// 	color: "white",
+					// },
+				}}
 			/>
+			{/* </FormControl> */}
 			<SelectField
 				label={LavelType.TIPO}
 				setValue={setValue}
@@ -148,8 +163,7 @@ export default function AgregarServicio() {
 				registerValue='tipo'
 				errors={errors.tipo}
 				lista={tipos}
-				preseleccion='1'
-				noShrink={true}
+				preseleccionId='1'
 			/>
 			<SelectField
 				label={LavelType.PERIODO}
@@ -158,9 +172,17 @@ export default function AgregarServicio() {
 				registerValue='periodo'
 				errors={errors.periodo}
 				lista={periodos}
-				noShrink={true}
-				preseleccion='4'
+				preseleccionId='4'
 			/>
+			{/* <SelectField
+				label={LavelType.PLAZO}
+				setValue={setValue}
+				register={register}
+				registerValue='plazo'
+				errors={errors.plazo}
+				lista={plazos}
+				preseleccionId='1'
+			/> */}
 			<SelectField
 				label={LavelType.COMPARTIR}
 				register={register}
@@ -168,7 +190,6 @@ export default function AgregarServicio() {
 				registerValue='compartir'
 				errors={errors.compartir}
 				lista={usuariosAgregados}
-				noShrink={true}
 				multipleTrue={true}
 			/>
 			<SelectField
@@ -179,8 +200,7 @@ export default function AgregarServicio() {
 				errors={errors.importancia}
 				lista={importancias}
 				vacio={true}
-				noShrink={true}
-				preseleccion={"3"}
+				preseleccionId={"3"}
 			/>
 
 			<SelectField
@@ -191,8 +211,7 @@ export default function AgregarServicio() {
 				errors={errors.titular}
 				lista={titulares}
 				vacio={true}
-				noShrink={true}
-				preseleccion={"1"}
+				preseleccionId={"1"}
 			/>
 			<FormControlLabel
 				{...register("pagado")}
@@ -211,6 +230,12 @@ export default function AgregarServicio() {
 					fullWidth
 					variant='outlined'
 					autoComplete='off'
+					InputLabelProps={{
+						shrink: true,
+						// sx: {
+						// 	color: "white",
+						// },
+					}}
 				/>
 			)}
 			<AgregarFacturas

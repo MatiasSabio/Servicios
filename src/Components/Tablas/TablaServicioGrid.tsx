@@ -1,40 +1,37 @@
+import GridRow from "@/Commons/GridRow";
 import { BasicCell, HeadCell } from "@/Commons";
 import ColapseTable from "@/Commons/ColapseTable";
-import CreateAccionButton from "@/Commons/CreateAccionButton";
 import useBandera from "@/Hooks/useBandera";
-import { AccionButton, reduxEnum, Servicio } from "@/Models";
-import { colorEmui } from "@/Models/enum/colorEmui";
+import { Servicio } from "@/Models";
 import { RootState } from "@/Redux";
 import { DateFunctions } from "@/Utils";
 import EditIcon from "@mui/icons-material/Edit";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import Box from "@mui/material/Box/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { Fragment, useEffect, useState } from "react";
+import * as React from "react";
 import { useSelector } from "react-redux";
+import Box from "@mui/material/Box/Box";
+import TableContainer from "@/Commons/TableContainer";
 
 interface TablaInterface {
 	head: String[];
-	redux: Servicio[];
-	actions: AccionButton[];
+	actions?: any;
+	reduxService?: any;
 	backService?: any;
 }
-interface RowInterface {
-	servicio: Servicio;
-	actions: AccionButton[];
-}
 
-function Row(props: RowInterface) {
+function Row(props: Servicio) {
 	const {
 		nombre,
 		ultimoVencimiento,
@@ -52,13 +49,11 @@ function Row(props: RowInterface) {
 		atencionAlCliente,
 		emailOUsuario,
 		contraseña,
-	} = props.servicio;
-	const actions = props.actions;
-
+	} = props;
 	const { order, dateDifference, periodoDifference } = DateFunctions;
 	const { bandera: general, setChange: setChangeGeneral } = useBandera();
 	const { bandera: ocultos, setChange: setChangeOcultos } = useBandera();
-
+	const fecha = DateFunctions.order(ultimoVencimiento);
 	const headsOcultos = [
 		"Numero de Cliente",
 		"Atencion Al Cliente",
@@ -82,24 +77,23 @@ function Row(props: RowInterface) {
 	const bodyGeneral = [periodo, tipo, importancia, titular, compartir];
 
 	const childrenGeneral = (
-		<>
-			<TableRow>
+		<GridRow colSpan='full' colsNum='8' className='bg-black'>
+			<GridRow colSpan='full' colsNum='8'>
 				<TableCell>
 					<IconButton size='small' onClick={() => setChangeOcultos()}>
 						{ocultos ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
 					</IconButton>
 				</TableCell>
 				<HeadCell name='Datos Ocultos' />
-			</TableRow>
-			<TableRow>
-				<TableCell />
+			</GridRow>
+			<GridRow colSpan='full' colsNum='8'>
 				<ColapseTable
 					bandera={ocultos}
 					body={bodyOcultos}
 					heads={headsOcultos}
 				/>
-			</TableRow>
-		</>
+			</GridRow>
+		</GridRow>
 	);
 
 	const borderLeftConditional = () => {
@@ -109,9 +103,7 @@ function Row(props: RowInterface) {
 		const conditionOrange =
 			periodoDifference(order(fechaDePago), periodo.value) < 3;
 		const conditionYellow =
-			(pagado &&
-				periodoDifference(order(ultimoVencimiento), periodo.value) < 3) ||
-			(!pagado && !ultimoVencimiento);
+			pagado && periodoDifference(order(ultimoVencimiento), periodo.value) < 3;
 		const conditionGreen = !conditionRed && !conditionOrange;
 
 		if (conditionGreen) {
@@ -129,20 +121,20 @@ function Row(props: RowInterface) {
 		return `border-l-4 ${color}`;
 	};
 	const colorPagoButton = () => {
-		let color = colorEmui.SUCCESS;
+		let color = "success";
 		const conditionOrange =
 			periodoDifference(order(fechaDePago), periodo.value) < 3 ||
 			(pagado &&
 				periodoDifference(order(ultimoVencimiento), periodo.value) < 3);
 		if (conditionOrange) {
-			color = colorEmui.WARNING;
+			color = "warning";
 		}
 		return color;
 	};
 
 	return (
-		<Fragment>
-			<TableRow className={borderLeftConditional()}>
+		<React.Fragment>
+			<GridRow colsNum={"8"} className={borderLeftConditional()}>
 				<TableCell>
 					<IconButton
 						aria-label='expand row'
@@ -180,95 +172,51 @@ function Row(props: RowInterface) {
 					)
 				) : (
 					<TableCell>
-						<Button color={colorEmui.ERROR}>
+						<Button color={"error"}>
 							No <EditIcon />
 						</Button>
 					</TableCell>
 				)}
-				<Box>
-					{actions?.map((action: AccionButton) => {
-						const params = {
-							Icono: action.Icono,
-							action: action.action,
-							param: props.servicio,
-							color: action.color,
-						};
-						return CreateAccionButton(params);
-					})}
-				</Box>
-				{/* <Box className='grid grid-cols-3 justify-start '>
+				<Box className='grid grid-cols-3 justify-start '>
 					<Button>
 						<ArchiveIcon color={"disabled"} />
 					</Button>
 					<Button>
-						<SettingsIcon color={"inherit"} />
+						<EditIcon color={"inherit"} />
 					</Button>
 					<Button>
 						<DeleteForeverIcon color={"error"} />
 					</Button>
-				</Box> */}
-			</TableRow>
-			<TableRow className={"bg-slate-100 "}>
+				</Box>
+			</GridRow>
+			<GridRow colsNum='8' className={"bg-slate-100 grid grid-cols-7"}>
 				<ColapseTable
 					bandera={general}
 					body={bodyGeneral}
 					heads={headsGeneral}
 					children={childrenGeneral}
 				/>
-			</TableRow>
-		</Fragment>
+			</GridRow>
+		</React.Fragment>
 	);
 }
 
-// function rows() {
-// 	const state = useSelector((state: RootState) => state.servicios);
-// 	return state.servicios;
-// }
+function rows() {
+	const state = useSelector((state: RootState) => state.servicios);
+	return state.servicios;
+}
 // props: TablaInterface
-
-export default function TablaServicos(props: TablaInterface) {
-	const { head, actions, backService, redux } = props;
-	// const [serviciosRows, setServiciosRows] = useState<Servicio[]>([]);
-	// const [archivadosRows, setArchivadosRows] = useState<Servicio[]>([]);
-
-	// // setServiciosArray([...servicios]);
-	// useEffect(() => {
-	// 	setServiciosRows(
-	// 		useSelector((state: RootState) => state.servicios).serviciosArray
-	// 	);
-	// 	setArchivadosRows(
-	// 		useSelector((state: RootState) => state.archivados).archivadosArray
-	// 	);
-
-	// 	if (redux === "servicios") {
-	// 		servicios = useSelector((state: RootState) => state.servicios);
-	// 		console.log(servicios);
-	// 	}
-	// 	if (redux === "archivados") {
-	// 		servicios = useSelector((state: RootState) => state.archivados);
-	// 		console.log(servicios);
-	// 	}
-	// 	// 	// backService
-	// 	// 	// setServiciosArray(backService);
-	// }, []);
-
+export default function TablaServicosGrid(props: TablaInterface) {
+	const { head, actions, backService, reduxService } = props;
 	return (
-		<TableContainer component={Paper}>
-			<Table size='small' aria-label='collapsible table'>
-				<TableHead>
-					<TableRow>
-						<TableCell />
-						{head.map((name, i) => (
-							<HeadCell name={name} key={i} />
-						))}
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{/* {redux === reduxEnum.SERVICIOS */}
-					{redux?.map((servicio) => Row({ servicio, actions }))}
-					{/* : archivadosRows?.map((servicio) => Row({ servicio, actions }))} */}
-				</TableBody>
-			</Table>
+		<TableContainer>
+			<GridRow colSpan={"full"} colsNum={"10"} className={" bg-yellow-300"}>
+				<TableCell className='col-start-1' />
+				{head.map((name, i) => (
+					<HeadCell name={name} key={i} style={` bg-red-700`} />
+				))}
+			</GridRow>
+			{/* {rows().map((servicio) => Row(servicio))} */}
 		</TableContainer>
 	);
 }
